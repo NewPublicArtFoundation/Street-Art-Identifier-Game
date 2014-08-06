@@ -65,18 +65,20 @@
   var ScoreBoard = function(){
   }
 
-  ScoreBoard.prototype.triggerAction = function(){
+  ScoreBoard.prototype.triggerAction = function(count){
     if($('#nameInput').val() == ''){
       $('#nameInput').val(chance.name());
     }
-    var newScore = Number($("#scoreInput").val());
+    var newScore = Number(count);
     var name = $("#nameInput").val();
-    $("#scoreInput").val("");
 
     if (name.length === 0)
       return;
 
     var userScoreRef = scoreListRef.child(name);
+
+    console.log('count ', count);
+    console.log('name ', name);
 
     // Use setWithPriority to put the name / score in Firebase, and set the priority to be the score.
     userScoreRef.setWithPriority({ name:name, score:newScore }, newScore);

@@ -49,6 +49,7 @@
   }
 
   GraffAnswer.prototype.saveKeyValue = function(input, url){
+    var self = this;
     var keyValue = {
       image: url,
       answer: input
@@ -56,6 +57,8 @@
     this.stored.push(keyValue);
     this.clearInput();
     this.renderStored();
+
+    sb.triggerAction(self.stored.length);
   }
 
   GraffAnswer.prototype.renderStored = function(){
