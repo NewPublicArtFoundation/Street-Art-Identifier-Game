@@ -3,7 +3,7 @@
   var LEADERBOARD_SIZE = 15;
 
   // Create our Firebase reference
-  var scoreListRef = new Firebase('https://publicartfound.firebaseio-demo.com//scoreList');
+  var scoreListRef = new Firebase('https://publicartfound.firebaseio.com/scoreList');
 
   // Keep a mapping of firebase locations to HTML elements, so we can move / remove elements as necessary.
   var htmlForPath = {};
