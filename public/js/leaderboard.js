@@ -1,6 +1,6 @@
 (function($){
   console.log('leader board running');
-  var LEADERBOARD_SIZE = 5;
+  var LEADERBOARD_SIZE = 15;
 
   // Create our Firebase reference
   var scoreListRef = new Firebase('https://publicartfound.firebaseio-demo.com//scoreList');
