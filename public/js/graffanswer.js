@@ -44,7 +44,7 @@
       var image = data.data;
       image = image.replace(/['"]+/g, '');
       console.log(image);
-      $('#artPhoto').html('<img>');
+      $('#artPhoto').html('<img style="max-width: 100%">');
       $('#artPhoto img').attr('src', image);
     });
   }

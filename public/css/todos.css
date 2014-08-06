@@ -7,6 +7,10 @@ body {
 #artPhoto{
 	height: 400px;
 	background: #eee;
+	background: url('https://s3.amazonaws.com/lkbg-aws-box/ajax-loader.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+
 	margin-bottom: 20px;
 	border: #ddd 1px solid;
 	overflow: hidden;
