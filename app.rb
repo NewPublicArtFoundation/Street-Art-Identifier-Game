@@ -6,5 +6,5 @@ require './database.rb'
 set :root, File.dirname(__FILE__)
 
 get '/' do
-  html :index
+  send_file 'index.html'
 end
