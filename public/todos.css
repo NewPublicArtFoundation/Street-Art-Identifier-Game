@@ -9,6 +9,7 @@ body {
 	background: #eee;
 	margin-bottom: 20px;
 	border: #ddd 1px solid;
+	overflow: hidden;
 }
 
 body {
