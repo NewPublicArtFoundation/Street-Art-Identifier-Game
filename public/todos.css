@@ -16,12 +16,22 @@ body {
 	line-height: 1.4em;
 	background: #eeeeee;
 	color: #333333;
-	width: 520px;
+	width: 800px;
 	margin: 0 auto;
 	-webkit-font-smoothing: antialiased;
 }
 
+#leaderBoard, #todoapp  {
+	float: left;
+}
+
+#leaderBoard {
+	margin-left: 20px;
+	width: 260px;
+}
+
 #todoapp {
+	width: 520px;
 	background: #fff;
 	padding: 20px;
 	margin-bottom: 40px;
