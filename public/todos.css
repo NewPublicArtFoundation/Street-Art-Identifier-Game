@@ -28,7 +28,8 @@ body {
 	width: 240px;
 }
 #leaderBoard input{
-	width: 100px;
+	width: 220px;
+	font-size: 14px;
 }
 
 #todoapp {
