@@ -3,69 +3,69 @@
 // Firebase adapter to persist Backbone models.
 
 // Load the application once the DOM is ready, using `jQuery.ready`:
-var Todos;
+var GraffAnswers;
 
 $(function(){
 
-  // Todo Model
+  // GraffAnswer Model
   // ----------
 
-  // Our basic **Todo** model has `title`, `order`, and `done` attributes.
-  var Todo = Backbone.Model.extend({
+  // Our basic **GraffAnswer** model has `title`, `order`, and `done` attributes.
+  var GraffAnswer = Backbone.Model.extend({
 
-    // Default attributes for the todo item.
+    // Default attributes for the GraffAnswer item.
     defaults: function() {
       return {
-        title: "empty todo...",
+        title: "empty GraffAnswer...",
         done: false
       };
     },
 
-    // Ensure that each todo created has `title`.
+    // Ensure that each GraffAnswer created has `title`.
     initialize: function() {
       if (!this.get("title")) {
         this.set({"title": this.defaults().title});
       }
     },
 
-    // Toggle the `done` state of this todo item.
+    // Toggle the `done` state of this GraffAnswer item.
     toggle: function() {
       this.set({done: !this.get("done")});
     }
 
   });
 
-  // Todo Collection
+  // GraffAnswer Collection
   // ---------------
 
-  // The collection of todos is backed by *Firebase*.
-  var TodoList = Backbone.Firebase.Collection.extend({
+  // The collection of GraffAnswers is backed by *Firebase*.
+  var GraffAnswerList = Backbone.Firebase.Collection.extend({
 
     // Reference to this collection's model.
-    model: Todo,
+    model: GraffAnswer,
 
-    // Save all of the todo items in a Firebase.
+    // Save all of the GraffAnswer items in a Firebase.
     firebase: new Firebase("https://backbone.firebaseio.com"),
 
-    // Filter down the list of all todo items that are finished.
+    // Filter down the list of all GraffAnswer items that are finished.
     done: function() {
-      return this.filter(function(todo){ return todo.get('done'); });
+      return this.filter(function(GraffAnswer){ return GraffAnswer.get('done'); });
     },
 
-    // Filter down the list to only todo items that are still not finished.
+    // Filter down the list to only GraffAnswer items that are still not finished.
     remaining: function() {
       return this.without.apply(this, this.done());
     }
   });
 
-  // Create our global collection of **Todos**.
-  Todos = new TodoList;
+  // Create our global collection of **GraffAnswers**.
+  GraffAnswers = new GraffAnswerList;
 
-  // Todo Item View
+  // GraffAnswer Item View
   // --------------
 
-  // The DOM element for a todo item...
-  var TodoView = Backbone.View.extend({
+  // The DOM element for a GraffAnswer item...
+  var GraffAnswerView = Backbone.View.extend({
 
     //... is a list tag.
     tagName:  "li",
@@ -82,15 +82,15 @@ $(function(){
       "blur .edit"      : "close"
     },
 
-    // The TodoView listens for changes to its model, re-rendering. Since there's
-    // a one-to-one correspondence between a **Todo** and a **TodoView** in this
+    // The GraffAnswerView listens for changes to its model, re-rendering. Since there's
+    // a one-to-one correspondence between a **GraffAnswer** and a **GraffAnswerView** in this
     // app, we set a direct reference on the model for convenience.
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
       this.listenTo(this.model, 'remove', this.remove);
     },
 
-    // Re-render the titles of the todo item.
+    // Re-render the titles of the GraffAnswer item.
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));
       this.$el.toggleClass('done', this.model.get('done'));
@@ -109,7 +109,7 @@ $(function(){
       this.input.focus();
     },
 
-    // Close the `"editing"` mode, saving changes to the todo.
+    // Close the `"editing"` mode, saving changes to the GraffAnswer.
     close: function() {
       var value = this.input.val();
       if (!value) {
@@ -127,7 +127,7 @@ $(function(){
 
     // Remove the item from the collection.
     clear: function() {
-      Todos.remove(this.model);
+      GraffAnswers.remove(this.model);
     }
 
   });
@@ -140,28 +140,29 @@ $(function(){
 
     // Instead of generating a new element, bind to the existing skeleton of
     // the App already present in the HTML.
-    el: $("#todoapp"),
+    el: $("#GraffAnswerapp"),
 
     // Our template for the line of statistics at the bottom of the app.
     statsTemplate: _.template($('#stats-template').html()),
 
     // Delegated events for creating new items, and clearing completed ones.
     events: {
-      "keypress #new-todo":  "createOnEnter",
+      "keypress #new-answer":  "createOnEnter"
       "click #clear-completed": "clearCompleted",
       "click #toggle-all": "toggleAllComplete"
     },
 
-    // At initialization we bind to the relevant events on the `Todos`
+    // At initialization we bind to the relevant events on the `GraffAnswers`
     // collection, when items are added or changed. Kick things off by
-    // loading any preexisting todos that might be saved in *Firebase*.
+    // loading any preexisting GraffAnswers that might be saved in *Firebase*.
     initialize: function() {
-      this.input = this.$("#new-todo");
+      this.input = this.$("#new-answer");
       this.allCheckbox = this.$("#toggle-all")[0];
 
-      this.listenTo(Todos, 'add', this.addOne);
-      this.listenTo(Todos, 'reset', this.addAll)
-      this.listenTo(Todos, 'all', this.render);
+      // this.listenTo(GraffAnswers, 'add', this.addOne);
+      this.listenTo(GraffAnswers, 'add', this.submitAnswer);
+      this.listenTo(GraffAnswers, 'reset', this.addAll)
+      this.listenTo(GraffAnswers, 'all', this.render);
 
       this.footer = this.$('footer');
       this.main = $('#main');
@@ -170,10 +171,10 @@ $(function(){
     // Re-rendering the App just means refreshing the statistics -- the rest
     // of the app doesn't change.
     render: function() {
-      var done = Todos.done().length;
-      var remaining = Todos.remaining().length;
+      var done = GraffAnswers.done().length;
+      var remaining = GraffAnswers.remaining().length;
 
-      if (Todos.length) {
+      if (GraffAnswers.length) {
         this.main.show();
         this.footer.show();
         this.footer.html(this.statsTemplate({done: done, remaining: remaining}));
@@ -185,40 +186,49 @@ $(function(){
       this.allCheckbox.checked = !remaining;
     },
 
-    // Add a single todo item to the list by creating a view for it, and
+    // Add a single GraffAnswer item to the list by creating a view for it, and
     // appending its element to the `<ul>`.
-    addOne: function(todo) {
-      var view = new TodoView({model: todo});
-      this.$("#todo-list").append(view.render().el);
-    },
+    submitAnswer: function(graffAnswer) {
+      var image = $('#artPhoto img').attr('src');
 
-    // Add all items in the **Todos** collection at once.
+      // var checkedAnswer = new GraffAnswerView({model: graffAnswer});
+      // var view = new GraffAnswerView({model: GraffAnswer});
+      // this.$("#GraffAnswer-list").append(view.render().el);
+    },
+    // // Add a single GraffAnswer item to the list by creating a view for it, and
+    // // appending its element to the `<ul>`.
+    // addOne: function(GraffAnswer) {
+    //   var view = new GraffAnswerView({model: GraffAnswer});
+    //   this.$("#GraffAnswer-list").append(view.render().el);
+    // },
+
+    // Add all items in the **GraffAnswers** collection at once.
     addAll: function() {
-      this.$("#todo-list").html("");
-      Todos.each(this.addOne, this);
+      this.$("#GraffAnswer-list").html("");
+      GraffAnswers.each(this.addOne, this);
     },
 
-    // If you hit return in the main input field, create new **Todo** model,
+    // If you hit return in the main input field, create new **GraffAnswer** model,
     // persisting it to *Firebase*.
     createOnEnter: function(e) {
       if (e.keyCode != 13) return;
       if (!this.input.val()) return;
 
-      Todos.add({title: this.input.val()});
+      GraffAnswers.add({title: this.input.val()});
       this.input.val('');
     },
 
-    // Clear all done todo items.
+    // Clear all done GraffAnswer items.
     clearCompleted: function() {
-      Todos.done().forEach(function(model) {
-        Todos.remove(model);
+      GraffAnswers.done().forEach(function(model) {
+        GraffAnswers.remove(model);
       });
       return false;
     },
 
     toggleAllComplete: function () {
       var done = this.allCheckbox.checked;
-      Todos.each(function (todo) { todo.set({'done': done}); });
+      GraffAnswers.each(function (GraffAnswer) { GraffAnswer.set({'done': done}); });
     }
 
   });
