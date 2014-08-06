@@ -15,6 +15,7 @@
     this.events();
     this.stored = [];
     this.loadImage();
+    this.currentScore();
   }
 
   GraffAnswer.prototype.events = function(){
@@ -30,6 +31,12 @@
       this.saveKeyValue(this.input, this.imageUrl);
     }
   }
+
+  GraffAnswer.prototype.currentScore = function(){
+    this.submission = this.stored.length;
+    sb.triggerAction(this.submission);
+  }
+
 
   GraffAnswer.prototype.loadImage = function(){
     // Do query for image

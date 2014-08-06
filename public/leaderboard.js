@@ -58,21 +58,30 @@
   // When the user presses enter on scoreInput, add the score, and update the highest score.
   $("#scoreInput").keypress(function (e) {
     if (e.keyCode == 13) {
-      if($('#nameInput').val() == ''){
-        $('#nameInput').val(chance.name());
-      }
-      var newScore = Number($("#scoreInput").val());
-      var name = $("#nameInput").val();
-      $("#scoreInput").val("");
-
-      if (name.length === 0)
-        return;
-
-      var userScoreRef = scoreListRef.child(name);
-
-      // Use setWithPriority to put the name / score in Firebase, and set the priority to be the score.
-      userScoreRef.setWithPriority({ name:name, score:newScore }, newScore);
+      sb.triggerAction();
     }
   });
+
+  var ScoreBoard = function(){
+  }
+
+  ScoreBoard.prototype.triggerAction = function(){
+    if($('#nameInput').val() == ''){
+      $('#nameInput').val(chance.name());
+    }
+    var newScore = Number($("#scoreInput").val());
+    var name = $("#nameInput").val();
+    $("#scoreInput").val("");
+
+    if (name.length === 0)
+      return;
+
+    var userScoreRef = scoreListRef.child(name);
+
+    // Use setWithPriority to put the name / score in Firebase, and set the priority to be the score.
+    userScoreRef.setWithPriority({ name:name, score:newScore }, newScore);
+  }
+
+  window.sb = new ScoreBoard();
 
 })(jQuery);
