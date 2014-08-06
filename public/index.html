@@ -1,85 +1,70 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <script src="https://cdn.firebase.com/js/client/1.0.15/firebase.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <meta charset="utf-8">
+  <title>Backbone.js Todos</title>
+  <link rel="stylesheet" href="todos.css"/>
 </head>
+
 <body>
-<table id="leaderboardTable"></table>
-<input type="text" id="nameInput" placeholder="Name">
-<input type="text" id="scoreInput" placeholder="Score">
 
-<script>
-  var LEADERBOARD_SIZE = 5;
+  <div id="todoapp">
 
-  // Create our Firebase reference
-  var scoreListRef = new Firebase('https://publicartfound.firebaseio.com/');
+    <header>
+      <h1>Public Art Found</h1>
+      <input id="new-todo" type="text" placeholder="Who is the artist?">
+    </header>
 
-  // Keep a mapping of firebase locations to HTML elements, so we can move / remove elements as necessary.
-  var htmlForPath = {};
+    <section id="main">
+      <input id="toggle-all" type="checkbox">
+      <label for="toggle-all">Mark all as complete</label>
+      <ul id="todo-list"></ul>
+    </section>
 
-  // Helper function that takes a new score snapshot and adds an appropriate row to our leaderboard table.
-  function handleScoreAdded(scoreSnapshot, prevScoreName) {
-    var newScoreRow = $("<tr/>");
-    newScoreRow.append($("<td/>").append($("<em/>").text(scoreSnapshot.val().name)));
-    newScoreRow.append($("<td/>").text(scoreSnapshot.val().score));
+    <footer>
+      <a id="clear-completed">Clear completed</a>
+      <div id="todo-count"></div>
+    </footer>
 
-    // Store a reference to the table row so we can get it again later.
-    htmlForPath[scoreSnapshot.name()] = newScoreRow;
+  </div>
 
-    // Insert the new score in the appropriate place in the table.
-    if (prevScoreName === null) {
-      $("#leaderboardTable").append(newScoreRow);
-    }
-    else {
-      var lowerScoreRow = htmlForPath[prevScoreName];
-      lowerScoreRow.before(newScoreRow);
-    }
-  }
+  <div id="instructions">
+    Double-click to edit a todo.
+  </div>
 
-  // Helper function to handle a score object being removed; just removes the corresponding table row.
-  function handleScoreRemoved(scoreSnapshot) {
-    var removedScoreRow = htmlForPath[scoreSnapshot.name()];
-    removedScoreRow.remove();
-    delete htmlForPath[scoreSnapshot.name()];
-  }
+  <div id="credits">
+    Created by
+    <br />
+    <a href="http://newpublicartfoundation.com">New Public Art Foundation</a>.
+    <br />Rewritten by: <a href="http://twitter.com/rememberlenny">Leonard Bogdonoff</a>.
+  </div>
 
-  // Create a view to only receive callbacks for the last LEADERBOARD_SIZE scores
-  var scoreListView = scoreListRef.limit(LEADERBOARD_SIZE);
+  <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script>
+  <script src="//cdn.firebase.com/v0/firebase.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"></script>
+  <script src="backfire.js"></script>
+  <script src="todos.js"></script>
 
-  // Add a callback to handle when a new score is added.
-  scoreListView.on('child_added', function (newScoreSnapshot, prevScoreName) {
-    handleScoreAdded(newScoreSnapshot, prevScoreName);
-  });
+  <!-- Templates -->
 
-  // Add a callback to handle when a score is removed
-  scoreListView.on('child_removed', function (oldScoreSnapshot) {
-    handleScoreRemoved(oldScoreSnapshot);
-  });
+  <script type="text/template" id="item-template">
+    <div class="view">
+      <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+      <label><%- title %></label>
+      <a class="destroy"></a>
+    </div>
+    <input class="edit" type="text" value="<%- title %>" />
+  </script>
 
-  // Add a callback to handle when a score changes or moves positions.
-  var changedCallback = function (scoreSnapshot, prevScoreName) {
-    handleScoreRemoved(scoreSnapshot);
-    handleScoreAdded(scoreSnapshot, prevScoreName);
-  };
-  scoreListView.on('child_moved', changedCallback);
-  scoreListView.on('child_changed', changedCallback);
+  <script type="text/template" id="stats-template">
+    <% if (done) { %>
+      <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
+    <% } %>
+    <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+  </script>
 
-  // When the user presses enter on scoreInput, add the score, and update the highest score.
-  $("#scoreInput").keypress(function (e) {
-    if (e.keyCode == 13) {
-      var newScore = Number($("#scoreInput").val());
-      var name = $("#nameInput").val();
-      $("#scoreInput").val("");
-
-      if (name.length === 0)
-        return;
-
-      var userScoreRef = scoreListRef.child(name);
-
-      // Use setWithPriority to put the name / score in Firebase, and set the priority to be the score.
-      userScoreRef.setWithPriority({ name:name, score:newScore }, newScore);
-    }
-  });
-</script>
-</body>
+  </body>
 </html>
