@@ -8,11 +8,12 @@
 
   var GraffAnswer = function(){
     this.initialize();
-    this.events();
   }
 
   GraffAnswer.prototype.initialize = function(){
     console.log('Running');
+    this.events();
+    this.stored = [];
   }
 
   GraffAnswer.prototype.events = function(){
@@ -23,19 +24,23 @@
   GraffAnswer.prototype.detectKey = function(e){
     console.log(e);
     this.input = $('#new-answer').val();
-    this.getCurrentImage();
-    this.saveKeyValue();
+    this.imageUrl = this.getCurrentImage();
+    if(e.keyCode == 13){
+      this.saveKeyValue(this.input, this.imageUrl);
+    }
   }
 
   GraffAnswer.prototype.getCurrentImage = function(){
-    this.imageUrl = $('#artPhoto img').attr('src');
+    var imageUrl = $('#artPhoto img').attr('src');
+    return imageUrl;
   }
 
-  GraffAnswer.prototype.saveKeyValue = function(){
+  GraffAnswer.prototype.saveKeyValue = function(input, url){
     var keyValue = {
-      image: this.imageUrl,
-      answer: this.input
-    }
+      image: url,
+      answer: input
+    };
+    this.stored.push(keyValue);
     this.clearInput();
   }
 
