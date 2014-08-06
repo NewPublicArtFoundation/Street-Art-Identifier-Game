@@ -4,6 +4,13 @@ body {
 	padding: 0;
 }
 
+#artPhoto{
+	height: 400px;
+	background: #eee;
+	margin-bottom: 20px;
+	border: #ddd 1px solid;
+}
+
 body {
 	font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	line-height: 1.4em;
