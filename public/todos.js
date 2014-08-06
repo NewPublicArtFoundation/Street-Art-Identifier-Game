@@ -189,7 +189,8 @@ $(function(){
     // Add a single GraffAnswer item to the list by creating a view for it, and
     // appending its element to the `<ul>`.
     submitAnswer: function(graffAnswer) {
-      var image = $('#artPhoto img').attr('src');
+      var imageUrl = $('#artPhoto img').attr('src');
+      var userSelection = graffAnswer;
 
       // var checkedAnswer = new GraffAnswerView({model: graffAnswer});
       // var view = new GraffAnswerView({model: GraffAnswer});
