@@ -63,7 +63,7 @@
     this.stored.push(keyValue);
     this.clearInput();
     this.renderStored();
-
+    this.loadImage();
     sb.triggerAction(self.stored.length);
   }
 
