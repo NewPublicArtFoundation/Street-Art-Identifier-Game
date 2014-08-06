@@ -71,7 +71,7 @@ $(function(){
     tagName:  "li",
 
     // Cache the template function for a single item.
-    template: _.template($('#item-template').html()),
+    template: _.template($('#past-answer-template').html()),
 
     // The DOM events specific to an item.
     events: {
@@ -147,7 +147,7 @@ $(function(){
 
     // Delegated events for creating new items, and clearing completed ones.
     events: {
-      "keypress #new-answer":  "createOnEnter"
+      "keypress #new-answer":  "createOnEnter",
       "click #clear-completed": "clearCompleted",
       "click #toggle-all": "toggleAllComplete"
     },
@@ -156,6 +156,7 @@ $(function(){
     // collection, when items are added or changed. Kick things off by
     // loading any preexisting GraffAnswers that might be saved in *Firebase*.
     initialize: function() {
+      console.log('Started');
       this.input = this.$("#new-answer");
       this.allCheckbox = this.$("#toggle-all")[0];
 
@@ -192,6 +193,7 @@ $(function(){
       var imageUrl = $('#artPhoto img').attr('src');
       var userSelection = graffAnswer;
 
+
       // var checkedAnswer = new GraffAnswerView({model: graffAnswer});
       // var view = new GraffAnswerView({model: GraffAnswer});
       // this.$("#GraffAnswer-list").append(view.render().el);
@@ -212,6 +214,7 @@ $(function(){
     // If you hit return in the main input field, create new **GraffAnswer** model,
     // persisting it to *Firebase*.
     createOnEnter: function(e) {
+      console.log('Running createOnEnter');
       if (e.keyCode != 13) return;
       if (!this.input.val()) return;
 
