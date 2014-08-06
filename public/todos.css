@@ -16,21 +16,23 @@ body {
 	line-height: 1.4em;
 	background: #eeeeee;
 	color: #333333;
-	width: 800px;
+	width: 820px;
 	margin: 0 auto;
 	-webkit-font-smoothing: antialiased;
 }
 
-#leaderBoard, #todoapp  {
-	float: left;
-}
 
-#leaderBoard {
-	margin-left: 20px;
-	width: 260px;
+#leaderBoard{
+	float: right;
+	padding-left: 20px;
+	width: 240px;
+}
+#leaderBoard input{
+	width: 100px;
 }
 
 #todoapp {
+	float: left;
 	width: 520px;
 	background: #fff;
 	padding: 20px;
