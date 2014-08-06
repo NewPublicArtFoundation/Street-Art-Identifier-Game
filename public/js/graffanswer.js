@@ -42,8 +42,11 @@
     // Do query for image
     $.get( "get_graffiti", function( data ) {
       var image = data.data;
+      image = image.replace(/['"]+/g, '');
+      console.log(image);
+      $('#artPhoto').html('<img>');
+      $('#artPhoto img').attr('src', image);
     });
-    $('#artPhoto').html('<img src="' + image + '">');
   }
 
   GraffAnswer.prototype.getCurrentImage = function(){
