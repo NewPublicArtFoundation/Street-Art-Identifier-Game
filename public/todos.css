@@ -101,6 +101,10 @@ body {
 	/*background: url(destroy.png) no-repeat;*/
 }
 
+#feedback{
+	margin-top: 20px;
+}
+
 .answer-row *{
 	display: inline-block;
 }
