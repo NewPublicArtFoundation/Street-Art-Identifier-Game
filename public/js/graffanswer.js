@@ -40,7 +40,10 @@
 
   GraffAnswer.prototype.loadImage = function(){
     // Do query for image
-    // $('#artPhoto').html('<img src="">')''
+    $.get( "get_graffiti", function( data ) {
+      var image = data.data;
+    });
+    $('#artPhoto').html('<img src="' + image + '">');
   }
 
   GraffAnswer.prototype.getCurrentImage = function(){
