@@ -23,6 +23,24 @@
   GraffAnswer.prototype.detectKey = function(e){
     console.log(e);
     this.input = $('#new-answer').val();
+    this.getCurrentImage();
+    this.saveKeyValue();
+  }
+
+  GraffAnswer.prototype.getCurrentImage = function(){
+    this.imageUrl = $('#artPhoto img').attr('src');
+  }
+
+  GraffAnswer.prototype.saveKeyValue = function(){
+    var keyValue = {
+      image: this.imageUrl,
+      answer: this.input
+    }
+    this.clearInput();
+  }
+
+  GraffAnswer.prototype.clearInput = function(){
+    $('#new-answer').val('');
   }
 
   // GraffAnswer.prototype.initialize = function(){}
