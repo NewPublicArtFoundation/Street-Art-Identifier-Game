@@ -31,7 +31,7 @@
     }
   }
 
-  GraffAnswer.prototype.getCurrentImage = function(){
+  GraffAnswer.prototype.loadImage = function(){
     // Do query for image
     // $('#artPhoto').html('<img src="">')''
   }
@@ -48,6 +48,17 @@
     };
     this.stored.push(keyValue);
     this.clearInput();
+    this.renderStored();
+  }
+
+  GraffAnswer.prototype.renderStored = function(){
+    var self = this;
+    $('#todoapp-post').html('<div id="feedback"></div>');
+
+    for(var i = 0; i < self.stored.length; i++ ){
+      var content = '<p>' + self.stored[i].answer + '</p>';
+      $('#todoapp-post #feedback').append(content);
+    }
   }
 
   GraffAnswer.prototype.clearInput = function(){
