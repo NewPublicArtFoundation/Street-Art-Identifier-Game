@@ -14,6 +14,7 @@
     console.log('Running');
     this.events();
     this.stored = [];
+    this.loadImage();
   }
 
   GraffAnswer.prototype.events = function(){
@@ -28,6 +29,11 @@
     if(e.keyCode == 13){
       this.saveKeyValue(this.input, this.imageUrl);
     }
+  }
+
+  GraffAnswer.prototype.getCurrentImage = function(){
+    // Do query for image
+    // $('#artPhoto').html('<img src="">')''
   }
 
   GraffAnswer.prototype.getCurrentImage = function(){
@@ -50,5 +56,5 @@
 
   // GraffAnswer.prototype.initialize = function(){}
 
-  var graffApp = new GraffAnswer();
+  window.graffApp = new GraffAnswer();
 })(jQuery);
