@@ -56,7 +56,7 @@
     $('#todoapp-post').html('<div id="feedback"></div>');
 
     for(var i = 0; i < self.stored.length; i++ ){
-      var content = '<p>' + self.stored[i].answer + '</p>';
+      var content = '<div class="answer-row"><img class="answer-image" src="' + self.stored[i].image + '"><p>' + self.stored[i].answer + '</p></div>';
       $('#todoapp-post #feedback').append(content);
     }
   }

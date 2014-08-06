@@ -101,6 +101,15 @@ body {
 	/*background: url(destroy.png) no-repeat;*/
 }
 
+.answer-row *{
+	display: inline-block;
+}
+
+.answer-image{
+	height: 40px;
+	margin-right: 10px;
+}
+
 #todo-list li:hover .destroy {
   	display: block;
 }
