@@ -2,6 +2,8 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
+AWS.config(access_key_id: ENV['AWS_ACCESS_KEY_ID'] , secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'], region: 'us-west-2')
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
