@@ -47,13 +47,16 @@
 
   GraffAnswer.prototype.parseImageUrl = function(image){
     // image = http:/www.blahblah.com/132123.jpg
-    urlArr = image.split('/');
+    var urlArr = image.split('/'),
     // urlArr = ["http:", "www.blahblah.com", "132123.jpg"]
-    urlSegments = urlArr[urlArr.length-1];
+        urlLastSection = urlArr[urlArr.length-1],
+        urlSegments = urlLastSection.split('.'),
+        urlSegment  = urlSegments.join('');
     // urlSegments = 132123.jpg
-    return urlSegments;
+    return urlSegment;
   }
 
+  // LOADING
   GraffAnswer.prototype.loadImage = function(){
     var self = this,
         urlKey,
@@ -68,11 +71,13 @@
 
       // Note to self:
       // # These may run before the previous one is defined
-      urlKey = parseImageUrl(image);
+      urlKey = self.parseImageUrl(image);
+      this.currentImage = urlKey;
       this.currentAnswer = self.queryAnswer(urlKey);
     });
   }
 
+  // LOADING
   GraffAnswer.prototype.queryAnswer = function(urlKey){
     // stored el
     /*
@@ -84,34 +89,54 @@
     */
     var childBase = submitBase.child(urlKey),
         indexEl = 0,
-        correctAnswer;
-
-    _.map(childBase, function(el, index){
-      console.log("el ",el);
-      console.log("index ",index);
-      console.log("indexEl ",indexEl);
-      console.log("-----");
-      if(indexEl < el){
-        indexEl = el;
-        correctAnswer = index;
-      }
+        correctAnswer,
+        currentValue;
+    // Basic usage of .once() to read the data located at firebaseRef.
+    childBase.once('value', function(dataSnapshot) {
+      currentValue = dataSnapshot;
     });
-    console.log('Answer is: ',index);
+    console.log('currentValue ',currentValue);
+    console.log('urlKey ',urlKey);
+    if(currentValue != undefined){
+
+      _.map(currentValue, function(el, index){
+        console.log("el ",el);
+        console.log("index ",index);
+        console.log("indexEl ",indexEl);
+        console.log("-----");
+        if(indexEl < el){
+          indexEl = el;
+          correctAnswer = index;
+        }
+      });
+      console.log('Answer is: ',index);
+    } else {
+      correctAnswer = undefined;
+    }
     return correctAnswer;
   }
 
+  // LOADING
   GraffAnswer.prototype.getCurrentImage = function(){
     var imageUrl = $('#artPhoto img').attr('src');
     return imageUrl;
   }
 
+  // SAVE
   GraffAnswer.prototype.saveKeyValue = function(input, url){
     var self = this;
-    var keyValue = {
-      image: url,
-      answer: input
-    };
-    this.saveToServer(keyValue);
+    var childBase = submitBase.child(self.currentImage);
+    // Return object
+    console.log(childBase);
+
+    // Increment answer by one
+    if(childBase[input] != undefined){
+      childBase[input] = childBase[input] + 1;
+    } else {
+      childBase[input] = 1;
+    }
+
+    this.saveToServer(self.currentImage, childBase);
     this.stored.push(keyValue);
     this.clearInput();
     this.renderStored();
@@ -119,9 +144,8 @@
     sb.triggerAction(self.stored.length);
   }
 
-  GraffAnswer.prototype.saveToServer = function(keyValue){
-    var refUrl = encodeUriComponent(keyValue.image);
-    var referenceBase = submitBase.child(refUrl);
+  // SAVE
+  GraffAnswer.prototype.saveToServer = function(currentImage, childBase){
     referenceBase.setWithPriority()
   }
 
