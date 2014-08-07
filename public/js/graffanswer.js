@@ -3,6 +3,8 @@
 
 
 (function($){
+
+  var submitBase = new Firebase('https://publicartfound.firebaseio.com/submissions');
   var _ = window._;
   var Backbone = window.Backbone;
 
@@ -60,6 +62,9 @@
       image: url,
       answer: input
     };
+
+    submitBase.push(keyValue);
+
     this.stored.push(keyValue);
     this.clearInput();
     this.renderStored();
