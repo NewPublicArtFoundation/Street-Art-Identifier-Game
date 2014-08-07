@@ -81,12 +81,18 @@
     */
     var childBase = submitBase.child(urlKey),
         indexEl = 0;
-    _.map(childBase, function(el){
-      if(indexEl < childBase[el]){
+
+    _.map(childBase, function(el, index){
+      console.log("el ",el);
+      console.log("index ",index);
+      console.log("indexEl ",indexEl);
+      console.log("-----");
+      if(indexEl < el){
         indexEl = el;
+        this.currentAnswer = index;
       }
     });
-    this.currentAnswer = indexEl;
+    console.log('Answer is: ',index);
   }
 
   GraffAnswer.prototype.getCurrentImage = function(){
