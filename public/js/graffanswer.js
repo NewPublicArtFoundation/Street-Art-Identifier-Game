@@ -4,6 +4,12 @@
 
 (function($){
 
+  // Load image
+  // Enter selection
+  // - Check answer
+  // - Show in bottom
+  // Load next
+
   var submitBase = new Firebase('https://publicartfound.firebaseio.com/submissions');
   var _ = window._;
   var Backbone = window.Backbone;
@@ -39,16 +45,48 @@
     sb.triggerAction(this.submission);
   }
 
+  GraffAnswer.prototype.parseImageUrl = function(image){
+    // image = http:/www.blahblah.com/132123.jpg
+    urlArr = image.split('/');
+    // urlArr = ["http:", "www.blahblah.com", "132123.jpg"]
+    urlSegments = urlArr[urlArr.length-1];
+    // urlSegments = 132123.jpg
+    return urlSegments;
+  }
 
   GraffAnswer.prototype.loadImage = function(){
+    var self = this,
+        urlKey,
+        image;
     // Do query for image
     $.get( "get_graffiti", function( data ) {
-      var image = data.data;
+      image = data.data;
       image = image.replace(/['"]+/g, '');
       console.log(image);
       $('#artPhoto').html('<img style="max-width: 100%">');
       $('#artPhoto img').attr('src', image);
+      urlKey = parseImageUrl(image);
+      self.queryAnswer(urlKey);
     });
+  }
+
+  GraffAnswer.prototype.queryAnswer = function(urlKey){
+    // stored el
+    /*
+      childBase = {
+        revok: 10,
+        rawr: 1,
+        blah: 5
+      }
+    */
+    var childBase = submitBase.child(urlKey),
+        indexEl = 0;
+    _.map(childBase, function(el){
+      if(indexEl < childBase[el]){
+        indexEl = el;
+      }
+    });
+    this.currentAnswer = indexEl;
   }
 
   GraffAnswer.prototype.getCurrentImage = function(){
@@ -62,14 +100,18 @@
       image: url,
       answer: input
     };
-
-    submitBase.push(keyValue);
-
+    this.saveToServer(keyValue);
     this.stored.push(keyValue);
     this.clearInput();
     this.renderStored();
     this.loadImage();
     sb.triggerAction(self.stored.length);
+  }
+
+  GraffAnswer.prototype.saveToServer = function(keyValue){
+    var refUrl = encodeUriComponent(keyValue.image);
+    var referenceBase = submitBase.child(refUrl);
+    referenceBase.setWithPriority()
   }
 
   GraffAnswer.prototype.renderStored = function(){
