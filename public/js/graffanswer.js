@@ -86,17 +86,21 @@
         blah: 5
       }
     */
-    var childBase = submitBase.child(urlKey),
-        indexEl = 0,
-        correctAnswer,
-        currentValue;
     this.currentImage = urlKey;
-    console.log('currentImage ', this.currentImage);
+    this.childBase = submitBase.child(this.currentImage);
+    var indexEl = 0,
+        correctAnswer,
+        self = this,
+        currentValue;
+    console.log('this.currentImage ', this.currentImage);
+    console.log('this.childBase ', this.childBase);
     // Basic usage of .once() to read the data located at firebaseRef.
-    childBase.once('value', function(dataSnapshot) {
-      currentValue = dataSnapshot;
+    this.childBase.once('value', function(dataSnapshot) {
+      self.currentValue = dataSnapshot;
+      console.log(' dataSnapshot ',  dataSnapshot);
+      console.log(' self.currentValue ',  self.currentValue);
     });
-    console.log('currentValue ',currentValue);
+    console.log('currentValue ',self.currentValue);
     console.log('urlKey ',urlKey);
     if(currentValue != undefined){
 
@@ -127,25 +131,22 @@
   GraffAnswer.prototype.saveKeyValue = function(input, url){
     var self = this;
     console.log(self.currentImage);
-    var childBase = submitBase.child(self.currentImage);
-    var currentValue;
-    childBase.once('value', function(dataSnapshot) {
-      currentValue = dataSnapshot;
-    });
     // Return object
-    if(currentValue == undefined){
-      currentValue = {};
+    if(self.currentValue == undefined){
+      self.currentValue = {};
     }
 
-    console.log(currentValue);
+    console.log('currentValue pre: ', self.currentValue);
     // Increment answer by one
-    if(currentValue[input] != undefined){
-      currentValue[input] = currentValue[input] + 1;
+    if(self.currentValue[input] != undefined){
+      self.currentValue[input] = self.currentValue[input] + 1;
     } else {
-      currentValue[input] = 1;
+      self.currentValue[input] = 1;
     }
 
-    this.saveToServer(self.currentImage, childBase);
+    console.log('currentValue post: ', self.currentValue);
+
+    this.saveToServer(self.currentValue, self.childBase);
     this.stored.push(keyValue);
     this.clearInput();
     this.renderStored();
@@ -154,8 +155,8 @@
   }
 
   // SAVE
-  GraffAnswer.prototype.saveToServer = function(currentImage, childBase){
-    referenceBase.setWithPriority()
+  GraffAnswer.prototype.saveToServer = function(currentValue, childBase){
+    this.childBase.setWithPriority(currentValue , Firebase.ServerValue.TIMESTAMP, function(){ console.log('Sent')});
   }
 
   GraffAnswer.prototype.renderStored = function(){
