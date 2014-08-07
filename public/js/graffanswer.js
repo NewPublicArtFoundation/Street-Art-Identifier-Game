@@ -72,7 +72,6 @@
       // Note to self:
       // # These may run before the previous one is defined
       urlKey = self.parseImageUrl(image);
-      this.currentImage = urlKey;
       this.currentAnswer = self.queryAnswer(urlKey);
     });
   }
@@ -91,6 +90,8 @@
         indexEl = 0,
         correctAnswer,
         currentValue;
+    this.currentImage = urlKey;
+    console.log('currentImage ', this.currentImage);
     // Basic usage of .once() to read the data located at firebaseRef.
     childBase.once('value', function(dataSnapshot) {
       currentValue = dataSnapshot;
@@ -125,15 +126,23 @@
   // SAVE
   GraffAnswer.prototype.saveKeyValue = function(input, url){
     var self = this;
+    console.log(self.currentImage);
     var childBase = submitBase.child(self.currentImage);
+    var currentValue;
+    childBase.once('value', function(dataSnapshot) {
+      currentValue = dataSnapshot;
+    });
     // Return object
-    console.log(childBase);
+    if(currentValue == undefined){
+      currentValue = {};
+    }
 
+    console.log(currentValue);
     // Increment answer by one
-    if(childBase[input] != undefined){
-      childBase[input] = childBase[input] + 1;
+    if(currentValue[input] != undefined){
+      currentValue[input] = currentValue[input] + 1;
     } else {
-      childBase[input] = 1;
+      currentValue[input] = 1;
     }
 
     this.saveToServer(self.currentImage, childBase);
