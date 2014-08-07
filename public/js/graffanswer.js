@@ -65,6 +65,9 @@
       console.log(image);
       $('#artPhoto').html('<img style="max-width: 100%">');
       $('#artPhoto img').attr('src', image);
+
+      // Note to self:
+      // # These may run before the previous one is defined
       urlKey = parseImageUrl(image);
       this.currentAnswer = self.queryAnswer(urlKey);
     });
