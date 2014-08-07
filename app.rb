@@ -13,6 +13,10 @@ get '/' do
   send_file 'index.html'
 end
 
+get '/google9cff9cde487694e7.html' do
+  send_file 'google9cff9cde487694e7.html'
+end
+
 get '/get_graffiti' do
   content_type :json
   url = URI.parse('http://www.publicartfound.com/api/return_a_graffiti.json')
