@@ -66,7 +66,7 @@
       $('#artPhoto').html('<img style="max-width: 100%">');
       $('#artPhoto img').attr('src', image);
       urlKey = parseImageUrl(image);
-      self.queryAnswer(urlKey);
+      this.currentAnswer = self.queryAnswer(urlKey);
     });
   }
 
@@ -80,7 +80,8 @@
       }
     */
     var childBase = submitBase.child(urlKey),
-        indexEl = 0;
+        indexEl = 0,
+        correctAnswer;
 
     _.map(childBase, function(el, index){
       console.log("el ",el);
@@ -89,10 +90,11 @@
       console.log("-----");
       if(indexEl < el){
         indexEl = el;
-        this.currentAnswer = index;
+        correctAnswer = index;
       }
     });
     console.log('Answer is: ',index);
+    return correctAnswer;
   }
 
   GraffAnswer.prototype.getCurrentImage = function(){
