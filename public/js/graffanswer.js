@@ -10,6 +10,9 @@
   // - Show in bottom
   // Load next
 
+  var OVERRIDE_IMAGE = 'https://s3.amazonaws.com/lkbg-aws-box/101029633_171020c719_o.jpg';
+  var OVERRIDE_KEY = '01029633_171020c719_ojpg';
+
   var submitBase = new Firebase('https://publicartfound.firebaseio.com/submissions');
   var _ = window._;
   var Backbone = window.Backbone;
@@ -64,7 +67,13 @@
     // Do query for image
     $.get( "get_graffiti", function( data ) {
       image = data.data;
+
+      // This is the test image
+      image = OVERRIDE_IMAGE;
+
       image = image.replace(/['"]+/g, '');
+
+
       console.log(image);
       $('#artPhoto').html('<img style="max-width: 100%">');
       $('#artPhoto img').attr('src', image);
@@ -96,9 +105,12 @@
     console.log('this.childBase ', this.childBase);
     // Basic usage of .once() to read the data located at firebaseRef.
     this.childBase.once('value', function(dataSnapshot) {
-      self.currentValue = dataSnapshot;
-      console.log(' dataSnapshot ',  dataSnapshot);
-      console.log(' self.currentValue ',  self.currentValue);
+      self.currentValue = dataSnapshot.val();
+      if(self.currentValue != null){
+        console.log(' self.currentValue ',  self.currentValue);
+      } else {
+        console.log(' self.currentValue: null');
+      }
     });
     console.log('currentValue ',self.currentValue);
     console.log('urlKey ',urlKey);
