@@ -72,7 +72,7 @@
       image = OVERRIDE_IMAGE;
 
       image = image.replace(/['"]+/g, '');
-
+      self.imageUrl = image;
 
       console.log(image);
       $('#artPhoto').html('<img style="max-width: 100%">');
@@ -157,6 +157,11 @@
     }
 
     console.log('currentValue post: ', self.currentValue);
+
+    var keyValue = {
+      image: self.imageUrl,
+      answer: input,
+    }
 
     this.saveToServer(self.currentValue, self.childBase);
     this.stored.push(keyValue);
